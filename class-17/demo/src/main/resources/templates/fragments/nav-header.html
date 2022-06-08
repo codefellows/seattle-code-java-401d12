@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--Writing DRY code-->
+<h3 th:if="${username}" th:text="'Current User from fragment 1: ' + ${username}"></h3>
+<!-- th:fragment === a unique identifier -->
+<nav th:if="${username}" th:fragment="nav-header" th:text="'Current user from frag 2: ' + ${username}"></nav>
+<div>
+    <p>Do i exist?</p>
+</div>
+<!---->
+
+</body>
+</html>

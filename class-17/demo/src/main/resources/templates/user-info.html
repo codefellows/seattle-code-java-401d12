@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3 th:if="${username != null}" th:text="${'Current user: ' + username}"></h3>
+<h1 th:text="${' User info for user id: ' + appUserId}"></h1>
+
+<!--// Form for updating a user-->
+<!--can we th:disable the form??-->
+<form th:action="${'/user/' + appUserId}" th:method="PUT">
+    <label for="username">Username</label>
+<!--  th:disabled=(conditional expression) if true, allower user to interact with Input. If false,  -->
+    <input th:value="${appUsername}" type="text" name="username" id="username" th:disabled="${!username.equals(dinoUserUsername)}">
+
+    <input type="submit" value="Edit User Info">
+</form>
+
+<div th:text="${'testDate: ' + #temporals.format(testDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+</body>
+</html>
