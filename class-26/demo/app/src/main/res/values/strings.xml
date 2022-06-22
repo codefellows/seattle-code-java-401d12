@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ZorkMaster</string>
+    <string name="hello_zork_and_lemi">Hello Zork and Lemi!</string>
+    <string name="button">Button</string>
+    <string name="name">Name</string>
+    <string name="go_to_order_form">Go To order Form</string>
+</resources>
