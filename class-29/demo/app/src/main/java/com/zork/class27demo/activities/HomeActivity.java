@@ -3,17 +3,20 @@ package com.zork.class27demo.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zork.class27demo.R;
 import com.zork.class27demo.adapter.ProductListRecyclerViewAdapter;
+import com.zork.class27demo.database.TaskMasterDatabase;
 import com.zork.class27demo.models.Product;
 
 import java.util.ArrayList;
@@ -22,7 +25,10 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
     public static final String PRODUCT_NAME_EXTRA_TAG = "productName";
     SharedPreferences preferences;
-
+    TaskMasterDatabase taskMasterDatabase;
+    public static final String DATABASE_NAME = "zork_task_master"; // needs to be the same everywhere in our app!
+    ProductListRecyclerViewAdapter adapter;
+    List<Product> products = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,17 @@ public class HomeActivity extends AppCompatActivity {
 
         // Initialize shared pref
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // database builder
+        taskMasterDatabase = Room.databaseBuilder(
+                getApplicationContext(), //  so that we only have a single database across the whole app
+                TaskMasterDatabase.class,
+                DATABASE_NAME)
+                .allowMainThreadQueries()  // Don't do this in a real app!
+                .fallbackToDestructiveMigration() // If Room gets confused, it tosses your database; don't use this in production!
+                .build();
+
+        products = taskMasterDatabase.productDao().findAll();
 
         setUpSettingsImageView();
         setUpOrderButton();
@@ -46,6 +63,9 @@ public class HomeActivity extends AppCompatActivity {
         TextView userNicknameText = findViewById(R.id.homeNickname);
         userNicknameText.setText(userNickname);
 
+        products.clear();
+        products.addAll(taskMasterDatabase.productDao().findAll());
+        adapter.notifyDataSetChanged();
     }
 
     private void setUpSettingsImageView(){
@@ -59,14 +79,12 @@ public class HomeActivity extends AppCompatActivity {
     private void setUpOrderButton(){
         // Grab the order button
         Button orderButton = findViewById(R.id.homeOrderButton);
-        // setuyp onClick listener
+        // setup onClick listener
         orderButton.setOnClickListener(v -> {
         // Setup intent to go to ORderFOrmActivity
-            Intent goToOrderFormActivity = new Intent(HomeActivity.this, OrderFormActivity.class);
-        // Include an Extra with the event
-            goToOrderFormActivity.putExtra(PRODUCT_NAME_EXTRA_TAG, "Zorkypoo");
+            Intent goToAddAProductActivity = new Intent(HomeActivity.this, AddProductActivity.class);
         // start activity
-            startActivity(goToOrderFormActivity);
+            startActivity(goToAddAProductActivity);
         });
     }
 
@@ -80,20 +98,20 @@ public class HomeActivity extends AppCompatActivity {
         productListRecyclerView.setLayoutManager(layoutManager);
 
         // TODO: Step 2-2: Make some data items
-        List<Product> products = new ArrayList<>();
+//        List<Product> products = new ArrayList<>();
 
-        products.add(new Product("Pens"));
-        products.add(new Product("Pencils"));
-        products.add(new Product("Binders"));
-        products.add(new Product("Paperclips"));
-        products.add(new Product("Paper"));
-        products.add(new Product("Monitors"));
-        products.add(new Product("Flash Drives"));
+//        products.add(new Product("Pens"));
+//        products.add(new Product("Pencils"));
+//        products.add(new Product("Binders"));
+//        products.add(new Product("Paperclips"));
+//        products.add(new Product("Paper"));
+//        products.add(new Product("Monitors"));
+//        products.add(new Product("Flash Drives"));
 
         // TODO: Step 1-5: Create and attach the RecyclerView.Adapter
         // TODO: Step 2-3: Hand in data items(products array)
         // TODO: Step: 3-2 Give context to our adapter
-        ProductListRecyclerViewAdapter adapter = new ProductListRecyclerViewAdapter(products, this);
+        adapter = new ProductListRecyclerViewAdapter(products, this);
         // TODO Step: 1-5: set the adapter recyclerview
         productListRecyclerView.setAdapter(adapter);
 
