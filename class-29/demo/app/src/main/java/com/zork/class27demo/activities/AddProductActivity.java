@@ -8,6 +8,7 @@ import com.zork.class27demo.R;
 import com.zork.class27demo.database.TaskMasterDatabase;
 import com.zork.class27demo.models.Product;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -63,6 +64,8 @@ public class AddProductActivity extends AppCompatActivity {
                 Product newProduct = new Product(productName, productDescription, newDate, productCategory);
 
                 database.productDao().insertAProduct(newProduct);
+                Intent goToHomeActivity = new Intent(AddProductActivity.this, HomeActivity.class);
+                startActivity(goToHomeActivity);
 
             }
         });
