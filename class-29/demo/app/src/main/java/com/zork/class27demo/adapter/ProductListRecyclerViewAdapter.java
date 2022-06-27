@@ -47,15 +47,20 @@ public class ProductListRecyclerViewAdapter extends RecyclerView.Adapter<Product
     // TODO: Step 2-5: Bind data items to Fragments inside of ViewHolders
     // TODO: Step 3-1: change to ProductListViewHolder
     public void onBindViewHolder(@NonNull ProductListViewHolder holder, int position) {
-        TextView productFragmentTextView = holder.itemView.findViewById(R.id.productListFragmentTextView);
-        String productName = products.get(position).getName();
-        productFragmentTextView.setText(position + ". " + productName);
+        Product product = products.get(position);
+        TextView productNameTextView = holder.itemView.findViewById(R.id.fragmentProductNameTextView);
+        TextView productDateTextView = holder.itemView.findViewById(R.id.fragmentProductDateTextView);
+        TextView productCategoryTextView = holder.itemView.findViewById(R.id.fragmentProductCategoryTextView);
+
+        productNameTextView.setText(position + ". " + product.getName());
+        productDateTextView.setText(product.getDateCreated().toString());
+        productCategoryTextView.setText(product.getProductCategory().toString());
 
         // TODO: Step 3-3: Make OnClickHandler so we can interact with the RecyclerView items
         View productViewHolder = holder.itemView;
         productViewHolder.setOnClickListener(v ->{
             Intent goToOrderFormIntent = new Intent(callingActivity, OrderFormActivity.class);
-            goToOrderFormIntent.putExtra(HomeActivity.PRODUCT_NAME_EXTRA_TAG, productName);
+            goToOrderFormIntent.putExtra(HomeActivity.PRODUCT_NAME_EXTRA_TAG, product.getName());
             callingActivity.startActivity(goToOrderFormIntent);
         });
     }
