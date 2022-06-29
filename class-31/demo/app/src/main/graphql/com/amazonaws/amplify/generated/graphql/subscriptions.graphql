@@ -5,6 +5,7 @@ subscription OnCreateTask {
     title
     description
     status
+    name
     createdAt
     updatedAt
   }
@@ -15,6 +16,7 @@ subscription OnUpdateTask {
     title
     description
     status
+    name
     createdAt
     updatedAt
   }
@@ -25,6 +27,7 @@ subscription OnDeleteTask {
     title
     description
     status
+    name
     createdAt
     updatedAt
   }
@@ -49,6 +52,39 @@ subscription OnDeleteNote {
   onDeleteNote {
     id
     content
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateProduct {
+  onCreateProduct {
+    id
+    name
+    description
+    dateCreated
+    productCategory
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateProduct {
+  onUpdateProduct {
+    id
+    name
+    description
+    dateCreated
+    productCategory
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteProduct {
+  onDeleteProduct {
+    id
+    name
+    description
+    dateCreated
+    productCategory
     createdAt
     updatedAt
   }
