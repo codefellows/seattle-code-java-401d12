@@ -4,11 +4,13 @@
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 7,
-      "keyDescription": ""
+      "expirationTime": 2,
+      "apiKeyExpirationDate": "2022-07-01T18:26:30.815Z",
+      "keyDescription": "1111"
     },
     "conflictResolution": {},
     "apiName": "amplifyDatasource",
-    "gqlSchemaPath": "/Users/InstructorWhtie/Documents/code-fellows/401_class/seattle-code-java-401d12/class-31/demo/amplify/backend/api/amplifyDatasource/schema.graphql"
+    "gqlSchemaPath": "/Users/InstructorWhtie/Documents/code-fellows/401_class/seattle-code-java-401d12/class-31/demo/amplify/backend/api/amplifyDatasource/schema.graphql",
+    "additionalAuthTypes": []
   }
 }

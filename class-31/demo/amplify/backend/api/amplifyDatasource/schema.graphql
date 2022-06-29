@@ -3,8 +3,17 @@ type Task @model {
   title: String!
   description: String
   status: String
+  name: String
 }
 type Note @model {
   id: ID!
   content: String!
+}
+
+type Product @model @auth(rules: [{allow: public}]){
+  id: ID!
+  name: String!
+  description: String
+  dateCreated: AWSDateTime
+  productCategory: String
 }

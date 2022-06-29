@@ -10,10 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Product;
 import com.zork.class27demo.R;
 import com.zork.class27demo.activities.HomeActivity;
 import com.zork.class27demo.activities.OrderFormActivity;
-import com.zork.class27demo.models.Product;
+
 
 import java.util.List;
 
