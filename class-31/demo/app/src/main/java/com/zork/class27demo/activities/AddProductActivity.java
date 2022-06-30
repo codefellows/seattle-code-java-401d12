@@ -24,7 +24,7 @@ import java.util.List;
 public class AddProductActivity extends AppCompatActivity {
 
     public static final String TAG = "AddProductActivity";
-    String[] categories = {"Clothes", "Electronics", "Perishable_Goods", "Office_Supplies", "Misc"};
+    String[] categories = {"Clothes", "Electronics", "Perishable Goods", "Office Supplies", "Misc"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
