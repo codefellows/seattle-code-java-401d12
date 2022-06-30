@@ -63,6 +63,17 @@ subscription OnCreateProduct {
     description
     dateCreated
     productCategory
+    contactId
+    contactPerson {
+      id
+      email
+      fullName
+      products {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -74,6 +85,17 @@ subscription OnUpdateProduct {
     description
     dateCreated
     productCategory
+    contactId
+    contactPerson {
+      id
+      email
+      fullName
+      products {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
     createdAt
     updatedAt
   }
@@ -85,6 +107,83 @@ subscription OnDeleteProduct {
     description
     dateCreated
     productCategory
+    contactId
+    contactPerson {
+      id
+      email
+      fullName
+      products {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateContact {
+  onCreateContact {
+    id
+    email
+    fullName
+    products {
+      items {
+        id
+        name
+        description
+        dateCreated
+        productCategory
+        contactId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateContact {
+  onUpdateContact {
+    id
+    email
+    fullName
+    products {
+      items {
+        id
+        name
+        description
+        dateCreated
+        productCategory
+        contactId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteContact {
+  onDeleteContact {
+    id
+    email
+    fullName
+    products {
+      items {
+        id
+        name
+        description
+        dateCreated
+        productCategory
+        contactId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }

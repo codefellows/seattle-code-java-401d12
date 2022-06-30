@@ -16,4 +16,13 @@ type Product @model @auth(rules: [{allow: public}]){
   description: String
   dateCreated: AWSDateTime
   productCategory: String
+  contactId: ID! @index(name: "byContact", sortKeyFields: ["name"])
+  contactPerson: Contact @belongsTo(fields: ["contactId"])
+}
+
+type Contact @model @auth(rules: [{allow:public}]){
+  id: ID!
+  email: String!
+  fullName: String
+  products: [Product] @hasMany(indexName: "byContact", fields: ["id"])
 }

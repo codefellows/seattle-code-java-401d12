@@ -17,6 +17,7 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.generated.model.Contact;
 import com.amplifyframework.datastore.generated.model.Product;
 import com.zork.class27demo.R;
 import com.zork.class27demo.adapter.ProductListRecyclerViewAdapter;
@@ -69,6 +70,17 @@ public class HomeActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         products = new ArrayList<>();
 
+//        // Hardcoding Contacts (like your lab asks you to do)
+//        Contact contact1 = Contact.builder()
+//                .email("Zork@home.com")
+//                .fullName("Rizorkopasso")
+//                .build();
+//        Amplify.API.mutate(
+//                ModelMutation.create(contact1),
+//                successResponse -> Log.i(TAG, "HomeActivity.onCreate(): made a contact successfully"),  // success callback
+//                failureResponse -> Log.i(TAG, "HomeActivity.onCreate(): contact failed with this response: " + failureResponse)  // failure callback
+//        );
+//
 
 ////        // Testing creating Amplify model class
 //    String currentDateString = com.amazonaws.util.DateUtils.formatISO8601Date(new Date());
@@ -107,10 +119,13 @@ public class HomeActivity extends AppCompatActivity {
                 {
                     Log.i(TAG, "Read products successfully!");
                     products.clear();
-                    //products = new ArrayList<>();
+
                     for (Product databaseProduct : success.getData())
                     {
-                        products.add(databaseProduct);
+//                        String contactName = "zork"; // this could be the sharedPref name
+//                        if(databaseProduct.getContactPerson().getFullName().equals(contactName)){
+                            products.add(databaseProduct);
+//                        }
                     }
 
                     runOnUiThread(() ->
