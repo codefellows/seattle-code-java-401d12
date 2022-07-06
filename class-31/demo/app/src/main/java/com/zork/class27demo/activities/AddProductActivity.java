@@ -116,9 +116,11 @@ public class AddProductActivity extends AppCompatActivity {
                         .productCategory(productCategorySpinner.getSelectedItem().toString())
                         .contactPerson(selectedContact)
                         .build();
-                // TODO: THIS IS HOW WE CRUD DynamoDB
+                // TODO: THIS IS HOW WE CUD DynamoDB
                 Amplify.API.mutate(
                         ModelMutation.create(newProduct), // making a Graphql request to the cloud
+                        // ModelMutation.update()
+                        //ModelMutation.delete()
                         successResponse -> Log.i(TAG, "AddProductActivity.onCreate(): made a product successfully"),  // success callback
                         failureResponse -> Log.i(TAG, "AddProductActivity.onCreate(): failed with this response: " + failureResponse)  // failure callback
                 );

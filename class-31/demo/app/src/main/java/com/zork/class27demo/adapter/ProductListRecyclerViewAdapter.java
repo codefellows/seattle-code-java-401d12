@@ -55,6 +55,7 @@ public class ProductListRecyclerViewAdapter extends RecyclerView.Adapter<Product
         View productViewHolder = holder.itemView;
         productViewHolder.setOnClickListener(v ->{
             Intent goToOrderFormIntent = new Intent(callingActivity, OrderFormActivity.class);
+//            goToOrderFormIntent.putExtra()
             goToOrderFormIntent.putExtra(HomeActivity.PRODUCT_NAME_EXTRA_TAG, product.getName());
             callingActivity.startActivity(goToOrderFormIntent);
         });
