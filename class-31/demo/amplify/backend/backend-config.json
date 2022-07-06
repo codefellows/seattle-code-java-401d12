@@ -9,14 +9,42 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 2,
-              "apiKeyExpirationDate": "2022-07-01T18:26:30.815Z",
+              "apiKeyExpirationDays": 200,
+              "apiKeyExpirationDate": "2023-01-22T15:11:35.041Z",
               "description": "1111"
             }
           }
         }
       },
       "dependsOn": []
+    }
+  },
+  "auth": {
+    "demoe963179a": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      }
     }
   }
 }

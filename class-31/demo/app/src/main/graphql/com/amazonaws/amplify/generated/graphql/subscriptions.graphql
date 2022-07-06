@@ -8,6 +8,9 @@ subscription OnCreateTask {
     name
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnUpdateTask {
@@ -19,6 +22,9 @@ subscription OnUpdateTask {
     name
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnDeleteTask {
@@ -30,6 +36,9 @@ subscription OnDeleteTask {
     name
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnCreateNote {
@@ -38,6 +47,9 @@ subscription OnCreateNote {
     content
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnUpdateNote {
@@ -46,6 +58,9 @@ subscription OnUpdateNote {
     content
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnDeleteNote {
@@ -54,6 +69,9 @@ subscription OnDeleteNote {
     content
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnCreateProduct {
@@ -70,12 +88,19 @@ subscription OnCreateProduct {
       fullName
       products {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnUpdateProduct {
@@ -92,12 +117,19 @@ subscription OnUpdateProduct {
       fullName
       products {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnDeleteProduct {
@@ -114,12 +146,19 @@ subscription OnDeleteProduct {
       fullName
       products {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnCreateContact {
@@ -137,11 +176,18 @@ subscription OnCreateContact {
         contactId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnUpdateContact {
@@ -159,11 +205,18 @@ subscription OnUpdateContact {
         contactId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 subscription OnDeleteContact {
@@ -181,10 +234,17 @@ subscription OnDeleteContact {
         contactId
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
