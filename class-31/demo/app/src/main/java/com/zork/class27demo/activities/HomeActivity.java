@@ -14,28 +14,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.core.model.temporal.Temporal;
-import com.amplifyframework.datastore.generated.model.Contact;
 import com.amplifyframework.datastore.generated.model.Product;
 import com.zork.class27demo.R;
 import com.zork.class27demo.adapter.ProductListRecyclerViewAdapter;
 
-import org.w3c.dom.Text;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     public static final String TAG = "homeactivity";
-    public static final String PRODUCT_NAME_EXTRA_TAG = "productName";
+    public static final String PRODUCT_ID_TAG = "Product ID Tag";
     SharedPreferences preferences;
 
     ProductListRecyclerViewAdapter adapter;
@@ -51,61 +47,38 @@ public class HomeActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         products = new ArrayList<>();
 
-        // Hardcoding Contacts (like your lab asks you to do)
-//        Contact contact1 = Contact.builder()
-//                .email("Zork@home.com")
-//                .fullName("Rizorkopasso")
-//                .build();
-//        Amplify.API.mutate(
-//                ModelMutation.create(contact1),
-//                successResponse -> Log.i(TAG, "HomeActivity.onCreate(): made a contact successfully"),  // success callback
-//                failureResponse -> Log.i(TAG, "HomeActivity.onCreate(): contact failed with this response: " + failureResponse)  // failure callback
-//        );
-
-
-        // HARDCODE COGNITO SIGNUP
-//        Amplify.Auth.signUp("alex.white@codefellows.com", // use email address as username in all Cognito calls
-//                "p@ssw0rd",  // Cognito's default password policy is 8 characters, no other requirements
-//                AuthSignUpOptions.builder()
-//                        .userAttribute(AuthUserAttributeKey.email(), "alex.white@codefellows.com")
-//                        .userAttribute(AuthUserAttributeKey.nickname(), "ALEX")
-//                        .build(),
-//                success -> {
-//            Log.i(TAG, "Signup succeeded " + success.toString());
-//                },
-//                failure -> {
-//            Log.i(TAG, "Signup failed with message: " + failure.toString());
-//                }
-//                );
-
-        // HARDCODE confirm verification code
-//        Amplify.Auth.confirmSignUp("alex.white@codefellows.com",
-//                "085390",
-//                success ->{Log.i(TAG, "Verification succeeded: " + success.toString());},
-//                failure ->{Log.i(TAG, "Verification failed: " + failure.toString());}
-//                );
-
-        //Hardcoded signin
-//        handleSignIn();
-
-        Amplify.Auth.signOut(
-                () ->
-                {
-                    Log.i(TAG, "Logout succeeded!");
-                },
-                failure ->
-                {
-                    Log.i(TAG, "Logout failed: " + failure.toString());
-                }
-        );
-
-
-
-
         setUpSettingsImageView();
         setUpOrderButton();
         setUpProductListRecyclerView();
         setUpLoginOutButtons();
+//        manualFileUploader();
+    }
+
+    public void manualFileUploader(){
+        // Manually create an S3 file for testing
+
+        String testFilename = "testFileName";
+        File testFile = new File(getApplicationContext().getFilesDir(), testFilename);
+
+        try
+        {
+            BufferedWriter testFileBufferedWriter = new BufferedWriter(new FileWriter(testFile));
+            testFileBufferedWriter.append("Some test text here\nAnother line of test text");
+            testFileBufferedWriter.close();  // Make sure to do this or the text may not be saved!
+        } catch (IOException ioe)
+        {
+            Log.e(TAG, "Could not write file locally with filename: " + testFilename);
+        }
+
+        // S3 is EXPECTING a key, this is how you reference your files
+        String testFileS3Key = "someFileOnS3.txt";
+
+        Amplify.Storage.uploadFile(
+                testFileS3Key,
+                testFile,
+                success ->Log.i(TAG, "S3 upload succeeded! Key is: " + success.getKey()),
+                failure -> Log.i(TAG, "S3 upload failed! " + failure.getMessage())
+        );
     }
 
     @Override
@@ -182,7 +155,7 @@ public class HomeActivity extends AppCompatActivity {
     // Conditional Rendering! FTW
     public void setUpLoginOutButtons(){
         AuthUser authUser = Amplify.Auth.getCurrentUser();
-        Button loginButton = findViewById(R.id.loginButton);
+        Button loginButton = findViewById(R.id.loginHomeButton);
         Button logoutButton = findViewById(R.id.logoutButton);
         if(authUser == null){
             loginButton.setVisibility(View.VISIBLE);

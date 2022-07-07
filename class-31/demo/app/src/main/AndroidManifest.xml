@@ -11,6 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Class27demo">
         <activity
+            android:name=".activities.VerifyAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.EditProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AddProductActivity"
             android:exported="false" />
         <activity
