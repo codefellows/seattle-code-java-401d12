@@ -97,6 +97,7 @@ public class HomeActivity extends AppCompatActivity {
                 ModelQuery.list(Product.class),
                 success ->
                 {
+                    // TODO: setup error logger on success.getErrors
                     Log.i(TAG, "Read products successfully!");
                     products.clear();
 

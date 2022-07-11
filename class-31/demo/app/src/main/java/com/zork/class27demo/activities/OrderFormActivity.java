@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -16,8 +19,10 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
@@ -27,6 +32,7 @@ import com.amplifyframework.datastore.generated.model.Product;
 import com.google.android.material.snackbar.Snackbar;
 import com.zork.class27demo.R;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -43,6 +49,7 @@ public class OrderFormActivity extends AppCompatActivity {
     private CompletableFuture<List<Contact>> contactsFuture = null;
     private EditText nameEditText;
     private EditText descriptionEditText;
+    private String s3ImageKey = "";
     String[] categories = {"Clothes", "Electronics", "Perishable Goods", "Office Supplies", "Misc"};
     ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -59,6 +66,20 @@ public class OrderFormActivity extends AppCompatActivity {
         setUpSaveButton();
         setUpDeleteButton();
         setUpAddImageButton();
+
+        s3ImageKey = productToEdit.getProductImageKey();
+        if (s3ImageKey != null && !s3ImageKey.isEmpty()){
+            Amplify.Storage.downloadFile(
+                    s3ImageKey,
+                    new File(getApplication().getFilesDir(), s3ImageKey),
+                    success -> {
+                        ImageView productImageView = findViewById(R.id.orderFormImageView);
+                        productImageView.setImageBitmap(BitmapFactory.decodeFile(success.getFile().getPath()));
+                    },
+                    failure -> Log.e(TAG, "Unable to get image from S3 fpr the product with s3 key: " + s3ImageKey + "with error: " + failure.getMessage(), failure)
+            );
+        }
+
     }
 
     public void setUpAddImageButton(){
@@ -85,12 +106,12 @@ public class OrderFormActivity extends AppCompatActivity {
                         new ActivityResultCallback<ActivityResult>() {
                             @Override
                             public void onActivityResult(ActivityResult result) {
-                                Uri pickedImageURI = result.getData().getData();
+                                Uri pickedImageUri = result.getData().getData();
                                 try {
-                                    InputStream pickedImageInputStream = getContentResolver().openInputStream(pickedImageURI);
-                                    String pickedImageFileName = getFileNameFromUri(pickedImageURI);
+                                    InputStream pickedImageInputStream = getContentResolver().openInputStream(pickedImageUri);
+                                    String pickedImageFileName = getFileNameFromUri(pickedImageUri);
                                     // TODO:
-                                    //uploadInputStreamToS3(pickedImageInputStream, pickedImageFilename, pickedImageFileUri);
+                                    uploadInputStreamToS3(pickedImageInputStream, pickedImageFileName, pickedImageUri);
                                     Log.i(TAG, "Succeeded in getting input stream from a file on our phone");
                                 } catch (FileNotFoundException fnfe) {
                                     Log.e(TAG, "Could not get file from phone: " + fnfe.getMessage(), fnfe);
@@ -99,6 +120,32 @@ public class OrderFormActivity extends AppCompatActivity {
                         }
                 );
         return imagePickingActivityResultLauncher;
+    }
+
+    public void uploadInputStreamToS3(InputStream pickedImageInputStream, String pickedImageFileName, Uri pickedImageUri){
+        Amplify.Storage.uploadInputStream(
+                pickedImageFileName,
+                pickedImageInputStream,
+                success -> {
+                    // Log the success
+                    Log.i(TAG, "Succeeded in upoloading file to s3: " + success.getKey());
+                    // grab hold of the s3key
+                    s3ImageKey = success.getKey();
+
+                    // grab thew image view to display too
+                    ImageView productImageView = findViewById(R.id.orderFormImageView);
+                    // need a copy of InputStream, because you can't reuse them(just like a queue)
+                    InputStream pickedImageInputStreamCopy = null;
+                    try {
+                        // Reading a uri to get the input stream again
+                        pickedImageInputStreamCopy = getContentResolver().openInputStream(pickedImageUri);
+                    } catch (FileNotFoundException fnfe) {
+                        Log.e(TAG, "Could not get input stream from uri: " + fnfe.getMessage(), fnfe);
+                    }
+                    productImageView.setImageBitmap(BitmapFactory.decodeStream(pickedImageInputStreamCopy));
+                },
+                failure -> Log.e(TAG, "Failure in uploading file to S3 with filename: " + pickedImageFileName + " with error: " + failure.getMessage())
+        );
     }
 
     // Taken from https://stackoverflow.com/a/25005243/16889809
@@ -206,37 +253,45 @@ public class OrderFormActivity extends AppCompatActivity {
         Button saveButton = (Button) findViewById(R.id.editProductSaveButton);
         saveButton.setOnClickListener(v ->
         {
-            List<Contact> contacts = null;
-            String contactToSaveString = contactSpinner.getSelectedItem().toString();
-            try {
-                contacts = contactsFuture.get();
-            } catch (InterruptedException ie) {
-                Log.e(TAG, "InterruptedException while getting product");
-                Thread.currentThread().interrupt();
-            } catch (ExecutionException ee) {
-                Log.e(TAG, "ExecutionException while getting product");
-            }
-            Contact contactToSave = contacts.stream().filter(c -> c.getFullName().equals(contactToSaveString)).findAny().orElseThrow(RuntimeException::new);
-            Product productToSave = Product.builder()
-                    .name(nameEditText.getText().toString())
-                    .id(productToEdit.getId())
-                    .dateCreated(productToEdit.getDateCreated())
-                    .description(descriptionEditText.getText().toString())
-                    .contactPerson(contactToSave)
-                    .productCategory(productCategorySpinner.getSelectedItem().toString())
-                    .build();
-
-            Amplify.API.mutate(
-                    ModelMutation.update(productToSave),  // making a GraphQL request to the cloud
-                    successResponse ->
-                    {
-                        Log.i(TAG, "OrderFormActivity.onCreate(): edited a product successfully");
-                        // TODO: Display a Snackbar
-                        Snackbar.make(findViewById(R.id.OrderFormActivity), "Product saved!", Snackbar.LENGTH_SHORT).show();
-                    },  // success callback
-                    failureResponse -> Log.i(TAG, "OrderFormActivity.onCreate(): failed with this response: " + failureResponse)  // failure callback
-            );
+            saveProduct();
         });
+    }
+
+    public void saveProduct(){
+        // setup a List of conatacts
+        List<Contact> contacts = null;
+        // Grab from contact spinner, the current selected contact
+        String contactToSaveString = contactSpinner.getSelectedItem().toString();
+        // try catch for completebale future
+        try {
+            contacts = contactsFuture.get();
+        } catch (InterruptedException ie) {
+            Log.e(TAG, "InterruptedException while getting product");
+            Thread.currentThread().interrupt();
+        }
+        catch (ExecutionException ee) {
+            Log.e(TAG, "ExecutionException while getting product");
+        }
+        // Contact and Product builder
+        Contact contactToSave = contacts.stream().filter(contact -> contact.getFullName().equals(contactToSaveString)).findAny().orElseThrow(RuntimeException::new);
+        Product productToSave = Product.builder()
+                .name(nameEditText.getText().toString())
+                .id(productToEdit.getId())
+                .dateCreated(productToEdit.getDateCreated())
+                .description(productToEdit.getDescription())
+                .contactPerson(contactToSave)
+                .productCategory(productCategorySpinner.getSelectedItem().toString())
+                .productImageKey(s3ImageKey)
+                .build();
+//        AMplify update call
+        Amplify.API.mutate(
+                ModelMutation.update(productToSave),
+                success -> {
+                    Log.i(TAG, "Product updated successfully");
+                    //TODO: Make a success toast
+                },
+                failure -> Log.e(TAG, "Product did not update")
+        );
     }
 
     private void setUpDeleteButton() {

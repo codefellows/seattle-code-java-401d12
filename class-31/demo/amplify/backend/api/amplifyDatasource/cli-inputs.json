@@ -4,9 +4,9 @@
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 2,
-      "apiKeyExpirationDate": "2022-07-01T18:26:30.815Z",
-      "keyDescription": "1111"
+      "expirationTime": 200,
+      "apiKeyExpirationDate": "2023-01-27T17:07:18.108Z",
+      "keyDescription": "DemoKey"
     },
     "conflictResolution": {},
     "apiName": "amplifyDatasource",

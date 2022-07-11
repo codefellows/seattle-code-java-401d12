@@ -11,9 +11,6 @@ mutation CreateTask(
     name
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation UpdateTask(
@@ -28,9 +25,6 @@ mutation UpdateTask(
     name
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation DeleteTask(
@@ -45,9 +39,6 @@ mutation DeleteTask(
     name
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation CreateNote(
@@ -59,9 +50,6 @@ mutation CreateNote(
     content
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation UpdateNote(
@@ -73,9 +61,6 @@ mutation UpdateNote(
     content
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation DeleteNote(
@@ -87,9 +72,6 @@ mutation DeleteNote(
     content
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation CreateProduct(
@@ -102,6 +84,7 @@ mutation CreateProduct(
     description
     dateCreated
     productCategory
+    productImageKey
     contactId
     contactPerson {
       id
@@ -109,19 +92,12 @@ mutation CreateProduct(
       fullName
       products {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation UpdateProduct(
@@ -134,6 +110,7 @@ mutation UpdateProduct(
     description
     dateCreated
     productCategory
+    productImageKey
     contactId
     contactPerson {
       id
@@ -141,19 +118,12 @@ mutation UpdateProduct(
       fullName
       products {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation DeleteProduct(
@@ -166,6 +136,7 @@ mutation DeleteProduct(
     description
     dateCreated
     productCategory
+    productImageKey
     contactId
     contactPerson {
       id
@@ -173,19 +144,12 @@ mutation DeleteProduct(
       fullName
       products {
         nextToken
-        startedAt
       }
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation CreateContact(
@@ -203,21 +167,15 @@ mutation CreateContact(
         description
         dateCreated
         productCategory
+        productImageKey
         contactId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation UpdateContact(
@@ -235,21 +193,15 @@ mutation UpdateContact(
         description
         dateCreated
         productCategory
+        productImageKey
         contactId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation DeleteContact(
@@ -267,20 +219,14 @@ mutation DeleteContact(
         description
         dateCreated
         productCategory
+        productImageKey
         contactId
         createdAt
         updatedAt
-        _version
-        _deleted
-        _lastChangedAt
       }
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }

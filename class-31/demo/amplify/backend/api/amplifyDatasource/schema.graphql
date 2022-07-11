@@ -16,6 +16,7 @@ type Product @model @auth(rules: [{allow: public}]){
   description: String
   dateCreated: AWSDateTime
   productCategory: String
+  productImageKey: String
   contactId: ID! @index(name: "byContact", sortKeyFields: ["name"])
   contactPerson: Contact @belongsTo(fields: ["contactId"])
 }
